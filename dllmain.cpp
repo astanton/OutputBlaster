@@ -59,6 +59,7 @@ along with Output Blaster.If not, see < https://www.gnu.org/licenses/>.*/
 #include "Game Files/MotoGP.h"
 #include "Game Files/OperationGhost.h"
 #include "Game Files/Outrun2SP.h"
+#include "Game Files/ProjectR.h"
 #include "Game Files/R-Tuned.h"
 #include "Game Files/SegaRaceTV.h"
 #include "Game Files/SegaRacingClassic.h"
@@ -243,6 +244,9 @@ DWORD WINAPI OutputsLoop(LPVOID lpParam)
 	case 0x55f66578:
 		game = new TransformersShadowsRising;
 		break;
+	case 0xF01C9D6A:
+		game = new ProjectR;
+		break;
 
 	default:
 		break;
@@ -353,14 +357,21 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 	case DLL_THREAD_DETACH:
 		break;
 	case DLL_PROCESS_DETACH:
-		Outputs->SetValue(OutputLampStart, 0x00);
-		Outputs->SetValue(OutputLampView1, 0x00);
-		Outputs->SetValue(OutputLampView2, 0x00);
-		Outputs->SetValue(OutputLampView3, 0x00);
-		Outputs->SetValue(OutputLampView4, 0x00);
-		Outputs->SetValue(OutputLampLeader, 0x00);
-		Outputs->~COutputs();
-		OutputsRunning = false;
+		// adding try/catch around this cause sometimes it tries to access memory already deallocated and crashes on exit
+		__try {
+			Outputs->SetValue(OutputLampStart, 0x00);
+			Outputs->SetValue(OutputLampView1, 0x00);
+			Outputs->SetValue(OutputLampView2, 0x00);
+			Outputs->SetValue(OutputLampView3, 0x00);
+			Outputs->SetValue(OutputLampView4, 0x00);
+			Outputs->SetValue(OutputLampLeader, 0x00);
+			Outputs->~COutputs();
+			OutputsRunning = false;
+		}
+		__except (EXCEPTION_EXECUTE_HANDLER) {
+			// do nothing - just want smooth exit
+		}
+
 		break;
 	}
 	return TRUE;

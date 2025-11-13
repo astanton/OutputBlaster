@@ -35,10 +35,10 @@ static void __cdecl CBLampSet(int param_1, void* param_2)
 	//set lampType to nothing
 	EOutputs lampType = OutputLampOnline;
 	if (param_1 == 0) lampType = OutputLampStart;
-	else if (param_1 == 2) lampType = OutputLampView1;
-	else if (param_1 == 3) lampType = OutputLampView2;
-	else if (param_1 == 4) lampType = OutputLampView3;
-	else if (param_1 == 5) lampType = OutputLampView4;
+	else if (param_1 == 2) lampType = OutputLampRed;
+	else if (param_1 == 3) lampType = OutputLampBlue;
+	else if (param_1 == 4) lampType = OutputLampWhite;
+	else if (param_1 == 5) lampType = OutputLampGreen;
 	else if (param_1 == 6) lampType = OutputLampLeader;
 
 	if (lampType) {
@@ -111,10 +111,10 @@ static void __cdecl LampSC_Set(unsigned int param_1, unsigned int param_2)
 {
 	EOutputs lampType = OutputLampOnline;
 	if (param_1 == 0) lampType = OutputLampStart;
-	else if (param_1 == 2) lampType = OutputLampView1;
-	else if (param_1 == 3) lampType = OutputLampView2;
-	else if (param_1 == 4) lampType = OutputLampView3;
-	else if (param_1 == 5) lampType = OutputLampView4;
+	else if (param_1 == 2) lampType = OutputLampRed;
+	else if (param_1 == 3) lampType = OutputLampBlue;
+	else if (param_1 == 4) lampType = OutputLampWhite;
+	else if (param_1 == 5) lampType = OutputLampGreen;
 	else if (param_1 == 6) lampType = OutputLampLeader;
 
 	if (lampType) {
@@ -155,18 +155,18 @@ static void __cdecl LampFX_SetState(void* param_1)
 	if ((int)param_1 == 5)
 	{
 		Outputs->SetValue(OutputLampStart, true);
-		Outputs->SetValue(OutputLampView1, true);
-		Outputs->SetValue(OutputLampView2, true);
-		Outputs->SetValue(OutputLampView3, true);
-		Outputs->SetValue(OutputLampView4, true);
+		Outputs->SetValue(OutputLampRed, true);
+		Outputs->SetValue(OutputLampBlue, true);
+		Outputs->SetValue(OutputLampWhite, true);
+		Outputs->SetValue(OutputLampGreen, true);
 	}
 	else
 	{
 		Outputs->SetValue(OutputLampStart, false);
-		Outputs->SetValue(OutputLampView1, false);
-		Outputs->SetValue(OutputLampView2, false);
-		Outputs->SetValue(OutputLampView3, false);
-		Outputs->SetValue(OutputLampView4, false);
+		Outputs->SetValue(OutputLampRed, false);
+		Outputs->SetValue(OutputLampBlue, false);
+		Outputs->SetValue(OutputLampWhite, false);
+		Outputs->SetValue(OutputLampGreen, false);
 	
 	}
 	return LampFX_SetStateOri(param_1);

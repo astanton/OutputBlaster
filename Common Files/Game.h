@@ -18,6 +18,7 @@ along with Output Blaster.If not, see < https://www.gnu.org/licenses/>.*/
 #include "../Output Files/NetOutputs.h"
 #include <Windows.h>
 #include "../Common Files/MinHook.h"
+#include <bitset>
 
 static GameOutput m_game;
 static COutputs* Outputs;
@@ -55,6 +56,8 @@ public:
 	INT_PTR WriteIntPtr(INT_PTR offset, INT_PTR val, bool isRelativeOffset);
 	UINT8 WriteNop(INT_PTR offset, bool isRelativeOffset);
 	INT_PTR ReadIntPtr(INT_PTR offset, bool isRelativeOffset);
+	bool IsBitSet(bitset<64> value, int bit_position);
+	INT64 ReadInt64(INT_PTR offset, bool isRelativeOffset);
 	float ReadFloat32(INT_PTR offset, bool isRelativeOffset);
 };
 

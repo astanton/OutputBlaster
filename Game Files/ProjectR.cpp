@@ -13,23 +13,35 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Output Blaster.If not, see < https://www.gnu.org/licenses/>.*/
 
-#include "Cars.h"
+#include "ProjectR.h"
+#include <bitset>
 
 static int WindowsLoop()
 {
-	UINT8 Start = helpers->ReadByte(0x14D14A5, true);
-	UINT8 View1 = helpers->ReadByte(0x14D14AD, true);
-	UINT8 View2 = helpers->ReadByte(0x14D14B1, true);
-	UINT8 View3 = helpers->ReadByte(0x14D14B5, true);
-	UINT8 SeatBase = helpers->ReadByte(0x14D14D1, true);
-	UINT8 SeatBackrest = helpers->ReadByte(0x14D14D5, true);
 
-	Outputs->SetValue(OutputLampStart, !!(Start & 0xFF));
-	Outputs->SetValue(OutputLampRed, !!(View1 & 0xFF));
-	Outputs->SetValue(OutputLampBlue, !!(View2 & 0xFF));
-	Outputs->SetValue(OutputLampWhite, !!(View3 & 0xFF));
-	Outputs->SetValue(OutputSeat1Lamp, !!(SeatBase & 0xFF));
-	Outputs->SetValue(OutputSeat2Lamp, !!(SeatBackrest & 0xFF));
+	INT64 bits = helpers->ReadInt64(0x8E1940, true);
+	std::bitset<64> bitmap(bits);
+
+	bool view1 = helpers->IsBitSet(bitmap, 5);
+	bool view2 = helpers->IsBitSet(bitmap, 6);
+	bool view3 = helpers->IsBitSet(bitmap, 7);
+	bool abort = helpers->IsBitSet(bitmap, 8);
+	bool music = helpers->IsBitSet(bitmap, 9);
+	bool leader = helpers->IsBitSet(bitmap, 32);
+
+	Outputs->SetValue(OutputLampStart, abort);
+	Outputs->SetValue(OutputLampRed, view1);
+	Outputs->SetValue(OutputLampBlue, view2);
+	Outputs->SetValue(OutputLampWhite, view3);
+	Outputs->SetValue(OutputLampGreen, music);
+	Outputs->SetValue(OutputLampLeader, leader);
+
+	// adding these so we can clean up properly or if they are wanted to be used elsewehre
+	Outputs->SetValue(OutputLampView1, view1);
+	Outputs->SetValue(OutputLampView2, view2);
+	Outputs->SetValue(OutputLampView3, view3);
+	Outputs->SetValue(OutputLampView4, music);
+
 	return 0;
 }
 
@@ -42,12 +54,14 @@ static DWORD WINAPI OutputsAreGo(LPVOID lpParam)
 	}
 }
 
-void Cars::OutputsGameLoop()
+void ProjectR::OutputsGameLoop()
 {
 	if (!init)
 	{
+		helpers->log("in the init: ");
+
 		Outputs = CreateOutputsFromConfig();
-		m_game.name = "Cars";
+		m_game.name = "Project R";
 		Outputs->SetGame(m_game);
 		Outputs->Initialize();
 		Outputs->Attached();

@@ -96,10 +96,12 @@ static int WindowsLoop()
 	Outputs->SetValue(OutputBase1Right, Base1Right * (MaxScaleOutput * 1.0));
 	Outputs->SetValue(OutputSeatLeft, SeatLeft * (MaxScaleOutput * 1.0));
 	Outputs->SetValue(OutputSeatRight, SeatRight * (MaxScaleOutput * 1.0));
-	Outputs->SetValue(OutputInfinity1, Infinity1 * (MaxScaleOutput * 1.0));
-	Outputs->SetValue(OutputInfinity2, Infinity2 * (MaxScaleOutput * 1.0));
-	Outputs->SetValue(OutputInfinity3, Infinity3 * (MaxScaleOutput * 1.0));
+	Outputs->SetValue(OutputLampRed, Infinity1 * (MaxScaleOutput * 1.0));
+	Outputs->SetValue(OutputLampBlue, Infinity2 * (MaxScaleOutput * 1.0));
+	Outputs->SetValue(OutputLampWhite, Infinity3 * (MaxScaleOutput * 1.0));
 	Outputs->SetValue(OutputLampLeader, Leader * (MaxScaleOutput * 1.0));
+
+	helpers->log("got new message: ");
 	
 	return 0;
 }
@@ -121,17 +123,17 @@ static int SpeedoLoop()
 		switch (boost)
 		{
 		case 0x00:
-			Outputs->SetValue(OutputBoost, 1);
+			Outputs->SetValue(OutputLampStart, 1);
 			break;
 		case 0x01:
-			Outputs->SetValue(OutputBoost, 0);
+			Outputs->SetValue(OutputLampStart, 0);
 			break;
 		case 0x02:
 		case 0x03:
-			if (Outputs->GetValue(OutputBoost))
-				Outputs->SetValue(OutputBoost, 0);
+			if (Outputs->GetValue(OutputLampStart))
+				Outputs->SetValue(OutputLampStart, 0);
 			else
-				Outputs->SetValue(OutputBoost, 1);
+				Outputs->SetValue(OutputLampStart, 1);
 			break;
 		}
 

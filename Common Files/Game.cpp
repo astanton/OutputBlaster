@@ -111,6 +111,19 @@ int Helpers::ReadInt32(INT_PTR offset, bool isRelativeOffset)
 	return val;
 }
 
+INT64 Helpers::ReadInt64(INT_PTR offset, bool isRelativeOffset)
+{
+	INT64 val = 0;
+	SIZE_T read;
+	LPVOID trueOffset = (isRelativeOffset ? GetTranslatedOffset(offset) : (LPVOID)offset);
+	ReadProcessMemory(GetCurrentProcess(), trueOffset, &val, sizeof(INT64), &read);
+	return val;
+}
+
+bool Helpers::IsBitSet(std::bitset<64> value, int bit_position) {
+	return !!value[bit_position];
+ }
+
 INT_PTR Helpers::ReadIntPtr(INT_PTR offset, bool isRelativeOffset)
 {
 	SIZE_T read;
